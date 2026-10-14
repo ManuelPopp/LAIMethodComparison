@@ -35,9 +35,10 @@ licor_lai <- do.call(
   )
 
 metrics_table <- dplyr::full_join(
-  lidar_table, multispectral_table, licor_lai
+  lidar_table, multispectral_table,
   by = "plot_id"
-  )
+  ) %>%
+    dplyr::full_join(licor_lai, by = "plot_id")
 
 write.csv(
   metrics_table,
