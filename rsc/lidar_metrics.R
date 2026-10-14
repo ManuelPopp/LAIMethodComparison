@@ -28,7 +28,10 @@ dir_dsm <- file.path(dir_lidar, "dsm")
 dir_bnds <- file.path(dir_meta, "boundaries_adjusted")
 
 if (grepl("^[+-]?[0-9]+$", plot_args[1])) {
-  plot_list <- list.dirs(dir_las, full.names = FALSE, recursive = FALSE)
+  plot_list <- sub(
+    "_adjusted.gpkg", "",
+    list.files(dir_bnds, full.names = FALSE, recursive = FALSE)
+  )
   plot_list <- plot_list[plot_list != "."]
   plot_id <- plot_list[as.numeric(plot_args[1])]
 } else {
