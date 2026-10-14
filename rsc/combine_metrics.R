@@ -35,7 +35,7 @@ licor_lai <- do.call(
   )
 
 metrics_table <- dplyr::full_join(
-  lidar_table, multispectral_table,
+  lidar_table, multispectral_table, licor_lai
   by = "plot_id"
   )
 
