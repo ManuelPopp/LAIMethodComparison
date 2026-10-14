@@ -12,7 +12,7 @@ retry_queue=()
 # Launch a task function
 task() {
     plotid=$1
-    log_file="./log/nohup${plotid}.log"
+    log_file="/home/poppman/log/nohup${plotid}.log"
     echo "Starting task for plot $plotid"
 
     Rscript /home/poppman/git/LAIMethodComparison/rsc/lidar_metrics.R "$plotid"  &> "$log_file" &
