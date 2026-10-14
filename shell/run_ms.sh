@@ -15,7 +15,7 @@ task() {
     log_file="./log/nohup${plotid}ms.log"
     echo "Starting task for plot $plotid"
 
-    Rscript ./git/LAIMethodComparison/rsc/multispectral_metrics.R "$plotid"  &> "$log_file" &
+    Rscript /home/poppman/git/LAIMethodComparison/rsc/multispectral_metrics.R "$plotid"  &> "$log_file" &
     PID=$!
 
     echo "$PID:$plotid" >> .running_tasks  # store PID and plot
