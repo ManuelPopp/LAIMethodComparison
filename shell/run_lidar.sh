@@ -1,6 +1,6 @@
 #!/bin/bash
 
-THRESHOLD=$((250 * 1024 * 1024))  # GB in KB
+THRESHOLD=$((300 * 1024 * 1024))  # GB in KB
 max_tasks=2
 
 idx_start=1

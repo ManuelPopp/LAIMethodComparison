@@ -15,6 +15,9 @@ if (length(plot_args) != 1) {
   stop("Usage: Rscript lidar_metrics.R <plot_id>")
 }
 
+# Updatevalue to set non-tree pixels to NA or zero
+udv <- 0
+
 # Input directories
 dir_base <- "/dme/eunomia/plotdata"
 dir_meas <- file.path(dir_base, "measurments")
@@ -96,7 +99,7 @@ get_index <- function(
   
   if (!is.null(tree_cover_raster)) {
     rst <- terra::mask(
-        rst, mask = tree_cover_raster, maskvalues = 0, updatevalue = NA
+        rst, mask = tree_cover_raster, maskvalues = 0, updatevalue = udv
         )
   }
 

@@ -31,7 +31,8 @@ lidar_table <- do.call(rbind, lapply(files_lidar, read.csv))
 multispectral_table <- do.call(rbind, lapply(files_multispectral, read.csv))
 
 licor_lai <- do.call(
-  rbind, lapply(list.dirs(dir_licor, full.name = FALSE), get_lai, dir_licor = dir_licor)
+  rbind,
+  lapply(list.dirs(dir_licor, full.name = FALSE), get_lai, dir_licor = dir_licor)
   )
 
 metrics_table <- dplyr::full_join(
