@@ -87,11 +87,11 @@ gg_df <- df %>%
   ) %>%
   dplyr::mutate(
     value = ifelse(
-      metric %in% comparison$variable[comparison$relationship == "log-linear"],
+      metric %in% comparison$variable[1:4][comparison$relationship == "log-linear"],
       log(value), value
       ),
     metric = ifelse(
-      metric %in% comparison$variable[comparison$relationship == "log-linear"],
+      metric %in% comparison$variable[1:4][comparison$relationship == "log-linear"],
       paste0(metric, " (log-transformed)"),
       metric
     ),
@@ -107,7 +107,7 @@ gg_df <- df %>%
   )
 
 ggplot2::ggplot(data = gg_df, ggplot2::aes(x = value, y = lai)) +
-  ggplot2::geom_point(ggplot2::aes(colour = biome)) +
+  ggplot2::geom_point(ggplot2::aes(colour = biome, shape = biome)) +
   ggplot2::geom_smooth(method = "lm") +
   ggplot2::facet_wrap(. ~ metric, ncol = 2, scales = "free_x") +
   ggplot2::geom_text(
