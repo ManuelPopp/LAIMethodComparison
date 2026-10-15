@@ -1,52 +1,52 @@
-﻿PlotID,Country,Location,Biome
-EA01,Ecuador,El Angel,(Sub)tropical montane grasslands and shrublands (páramos)
-EA02,Ecuador,El Angel,(Sub)tropical montane grasslands and shrublands (páramos)
-EA03,Ecuador,El Angel,(Sub)tropical montane grasslands and shrublands (páramos)
-EA04,Ecuador,El Angel,(Sub)tropical montane grasslands and shrublands (páramos)
-GC01,Ecuador,Guacamayos,Cloud forest
-GC02,Ecuador,Guacamayos,Cloud forest
-GC06,Ecuador,Guacamayos,Cloud forest
-GC07,Ecuador,Guacamayos,Cloud forest
-MQ15,Ecuador,Maquipucuna,Cloud forest
-MQ16,Ecuador,Maquipucuna,Cloud forest
-MQ17,Ecuador,Maquipucuna,Cloud forest
-MQ18,Ecuador,Maquipucuna,Cloud forest
-MQ70,Ecuador,Maquipucuna,Cloud forest
-PC01,Ecuador,Papallacta,(Sub)tropical high montane grasslands and swamps (páramos)
-PP02,Ecuador,Papallacta,(Sub)tropical high montane grasslands and swamps (páramos)
-PP03,Ecuador,Papallacta,(Sub)tropical high montane grasslands and swamps (páramos)
-PP04,Ecuador,Papallacta,(Sub)tropical high montane grasslands with woodland patches (Polylepis)
-PP81,Ecuador,Papallacta,(Sub)tropical high montane grasslands with woodland patches (Polylepis)
-PP82,Ecuador,Papallacta,(Sub)tropical high montane grasslands with woodland patches (Polylepis)
-TP01,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-TP02,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-TP15,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-TP20,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-TP21,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-TP23,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-TP26,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-TPCP,Ecuador,Yasuni,Tropical lowland rainforest (Terra firme)
-FM01,Italy,Foresta di Montes,Mediterranean
-FM02,Italy,Foresta di Montes,Mediterranean
-FM03,Italy,Foresta di Montes,Mediterranean
-FM04,Italy,Foresta di Montes,Mediterranean
-IC01,Italy,Is Cannoneris,Mediterranean
-IC02,Italy,Is Cannoneris,Mediterranean
-IC03,Italy,Is Cannoneris,Mediterranean
-MP01,Italy,Monte Pino,Mediterranean
-MP02,Italy,Monte Pino,Mediterranean
-LB01,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB02,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB03,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB04,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB05,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB06,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB07,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB08,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-LB09,Brunei Darussalam,Labi,Tropical lowland rainforest (Terra firme)
-BL01,Brunei Darussalam,Belalong,Tropical lowland rainforest (Terra firme)
-BL02,Brunei Darussalam,Belalong,Tropical lowland rainforest (Terra firme)
-BL03,Brunei Darussalam,Belalong,Tropical lowland rainforest (Terra firme)
-BL04,Brunei Darussalam,Belalong,Tropical lowland rainforest (Terra firme)
-BL05,Brunei Darussalam,Belalong,Tropical lowland rainforest (Terra firme)
-BL06,Brunei Darussalam,Belalong,Tropical lowland rainforest (Terra firme)
+"PlotID","Country","Location","Biome","Latitude","Longitude"
+"EA01","Ecuador","El Angel","(Sub)tropical montane grasslands and shrublands (páramos)",0.705212,-77.981463
+"EA02","Ecuador","El Angel","(Sub)tropical montane grasslands and shrublands (páramos)",0.664611,-77.880367
+"EA03","Ecuador","El Angel","(Sub)tropical montane grasslands and shrublands (páramos)",0.666648,-77.881853
+"EA04","Ecuador","El Angel","(Sub)tropical montane grasslands and shrublands (páramos)",0.708098,-77.985051
+"GC01","Ecuador","Guacamayos","Cloud forest",-0.628524,-77.841204
+"GC02","Ecuador","Guacamayos","Cloud forest",-0.630874,-77.841245
+"GC06","Ecuador","Guacamayos","Cloud forest",-0.638865,-77.840054
+"GC07","Ecuador","Guacamayos","Cloud forest",-0.642521,-77.836901
+"MQ15","Ecuador","Maquipucuna","Cloud forest",0.121119,-78.61725
+"MQ16","Ecuador","Maquipucuna","Cloud forest",0.120676,-78.616344
+"MQ17","Ecuador","Maquipucuna","Cloud forest",0.119472,-78.614434
+"MQ18","Ecuador","Maquipucuna","Cloud forest",0.11847,-78.613296
+"MQ70","Ecuador","Maquipucuna","Cloud forest",0.119631,-78.615409
+"PC01","Ecuador","Papallacta","(Sub)tropical high montane grasslands and swamps (páramos)",-0.180901,-78.541457
+"PP02","Ecuador","Papallacta","(Sub)tropical high montane grasslands and swamps (páramos)",-0.259896,-78.09692
+"PP03","Ecuador","Papallacta","(Sub)tropical high montane grasslands and swamps (páramos)",-0.259071,-78.09383
+"PP04","Ecuador","Papallacta","(Sub)tropical high montane grasslands with woodland patches (Polylepis)",-0.326328,-78.150029
+"PP81","Ecuador","Papallacta","(Sub)tropical high montane grasslands with woodland patches (Polylepis)",-0.300386,-78.13332
+"PP82","Ecuador","Papallacta","(Sub)tropical high montane grasslands with woodland patches (Polylepis)",-0.258306,-78.092777
+"TP01","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.675468,-76.389528
+"TP02","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.6667305,-76.369033
+"TP15","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.6581535,-76.356542
+"TP20","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.697701,-76.422749
+"TP21","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.686179,-76.428242
+"TP23","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.658492,-76.45167
+"TP26","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.686808,-76.414614
+"TPCP","Ecuador","Yasuni","Tropical lowland rainforest (Terra firme)",-0.651225,-76.458095
+"FM01","Italy","Foresta di Montes","Mediterranean",40.114893,9.429321
+"FM02","Italy","Foresta di Montes","Mediterranean",40.116203,9.426774
+"FM03","Italy","Foresta di Montes","Mediterranean",40.117414,9.42451
+"FM04","Italy","Foresta di Montes","Mediterranean",40.120367,9.43038
+"IC01","Italy","Is Cannoneris","Mediterranean",39.047608,8.836401
+"IC02","Italy","Is Cannoneris","Mediterranean",39.046546,8.837922
+"IC03","Italy","Is Cannoneris","Mediterranean",39.033924,8.831151
+"MP01","Italy","Monte Pino","Mediterranean",40.946027,9.366626
+"MP02","Italy","Monte Pino","Mediterranean",40.944212,9.366623
+"LB01","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.574385,114.508201
+"LB02","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.65852,114.521853
+"LB03","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.657032,114.522755
+"LB04","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.367445,114.469661
+"LB05","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.754655,115.1784
+"LB06","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.752712,115.179704
+"LB07","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.38301,114.478384
+"LB08","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.386192,114.480324
+"LB09","Brunei Darussalam","Labi","Tropical lowland rainforest (Terra firme)",4.638579,115.116324
+"BL01","Brunei Darussalam","Belalong","Tropical lowland rainforest (Terra firme)",4.546089,115.156981
+"BL02","Brunei Darussalam","Belalong","Tropical lowland rainforest (Terra firme)",4.543163,115.153828
+"BL03","Brunei Darussalam","Belalong","Tropical lowland rainforest (Terra firme)",4.548546,115.156154
+"BL04","Brunei Darussalam","Belalong","Tropical lowland rainforest (Terra firme)",4.548506,115.160178
+"BL05","Brunei Darussalam","Belalong","Tropical lowland rainforest (Terra firme)",4.549564,115.162684
+"BL06","Brunei Darussalam","Belalong","Tropical lowland rainforest (Terra firme)",4.544077,115.163804
