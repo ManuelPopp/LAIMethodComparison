@@ -4,8 +4,10 @@ library("MASS")
 library("ggplot2")
 
 f_csv <- "L:/poppman/tmp/lai/plotdata.csv"
+f_info <- "D:/onedrive/OneDrive - Eidg. Forschungsanstalt WSL/switchdrive/PhD/git/LAIMethodComparison/data/plot_info.csv"
 
 df <- read.csv(f_csv)
+df_info <- read.csv(f_info)
 
 # Plot varibale correlations
 df %>%
@@ -62,7 +64,20 @@ summary(lm(lai ~ log(chm_p90), data = df))
 summary(lm(lai ~ ndvi_trees, data = df))
 summary(lm(lai ~ ndvi_trees + chm_p90, data = df))
 
-# Compare plots
+# Comparison plots
+biomes <- df_info %>%
+  dplyr::mutate(Plot = substr(PlotID, 1, 2)) %>%
+  dplyr::group_by(Plot, Biome) %>%
+  dplyr::summarise(
+    plot = tolower(dplyr::first(Plot)),
+    biome = vapply(
+      strsplit(dplyr::first(Biome), " "),
+      \(x) paste(head(x, 3), collapse = " "),
+      character(1)
+    ),
+    .groups = "drop"
+    )
+
 gg_df <- df %>%
   dplyr::select(c("plot_id", "lai", comparison$variable[1:4])) %>%
   tidyr::pivot_longer(
@@ -83,11 +98,16 @@ gg_df <- df %>%
     metric = stringr::str_replace(
       metric, "^[^_]+", \(x) stringr::str_to_upper(x)
     ),
-    metric = sub("_", " ", metric)
+    metric = sub("_", " ", metric),
+    plot = substr(plot_id, 1, 2)
+  ) %>%
+  dplyr::left_join(
+    y = biomes,
+    by = "plot"
   )
 
 ggplot2::ggplot(data = gg_df, ggplot2::aes(x = value, y = lai)) +
-  ggplot2::geom_point() +
+  ggplot2::geom_point(ggplot2::aes(colour = biome)) +
   ggplot2::geom_smooth(method = "lm") +
   ggplot2::facet_wrap(. ~ metric, ncol = 2, scales = "free_x") +
   ggplot2::geom_text(
@@ -108,7 +128,8 @@ ggplot2::ggplot(data = gg_df, ggplot2::aes(x = value, y = lai)) +
   ) +
   ggplot2::theme_classic() +
   ggplot2::theme(
-    strip.background = ggplot2::element_blank()
+    strip.background = ggplot2::element_blank(),
+    legend.position = "bottom"
   ) +
   ggplot2::ylab("Leaf area index (Licor LAI 2200C)")
 
