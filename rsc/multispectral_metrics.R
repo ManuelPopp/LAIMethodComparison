@@ -72,6 +72,7 @@ template <- terra::rast(
 boundary <- terra::vect(src_bnd) %>%
   terra::project(template)
 tree_cover <- terra::rast(src_treecover) %>%
+  terra::project(template, method = "near") %>%
   terra::resample(template, method = "near") %>%
   terra::crop(boundary)
 
