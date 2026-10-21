@@ -6,7 +6,10 @@ library("ggplot2")
 f_csv <- "L:/poppman/tmp/lai/plotdata.csv"
 f_info <- "D:/onedrive/OneDrive - Eidg. Forschungsanstalt WSL/switchdrive/PhD/git/LAIMethodComparison/data/plot_info.csv"
 
-df <- read.csv(f_csv)
+df <- read.csv(f_csv) %>%
+  dplyr::mutate(
+    ndvi_cover = ndvi_trees * tree_cover_fraction
+  )
 df_info <- read.csv(f_info)
 
 # Plot varibale correlations
@@ -23,11 +26,11 @@ df %>%
 # Get LAI correlations
 vars <- df %>%
   dplyr::select(where(is.numeric)) %>%
-  dplyr::select(-lai)
+  dplyr::select(-licor_lai)
 
 results <- data.frame(
   variable = names(vars),
-  correlation = sapply(vars, \(x) cor(x, df$lai, use = "complete.obs"))
+  correlation = sapply(vars, \(x) cor(x, df$licor_lai, use = "complete.obs"))
 ) %>%
   dplyr::mutate(explained_variance = correlation^2) %>%
   dplyr::arrange(desc(explained_variance))
@@ -35,7 +38,7 @@ results <- data.frame(
 log_results <- data.frame(
   variable = names(vars),
   correlation = sapply(vars, \(x) {
-    cor(log(x), df$lai, use = "complete.obs")
+    cor(log(x), df$licor_lai, use = "complete.obs")
   })
 ) %>%
   dplyr::mutate(explained_variance = correlation^2) %>%
@@ -50,19 +53,20 @@ comparison <- results %>%
   dplyr::arrange(desc(explained_variance))
 rownames(comparison) <- NULL
 
-comparison[which(grepl("trees", comparison$variable)),]
-
 # Look at some correlations
-plot(lai ~ log(chm_p90), data = df)
-plot(lai ~ ndvi_trees, data = df)
-plot(lai ~ log(lp1_median), data = df)
-plot(lai ~ log(lp2_median), data = df)
-plot(lai ~ log(abri_mean), data = df)
+plot(licor_lai ~ hemisfer_lai, data = df)
+plot(licor_lai ~ log(chm_p90), data = df)
+plot(licor_lai ~ ndvi_trees, data = df)
+plot(licor_lai ~ log(lp1_median), data = df)
+plot(licor_lai ~ log(lp2_median), data = df)
+plot(licor_lai ~ log(abri_mean), data = df)
 
-summary(lm(lai ~ tree_cover_fraction, data = df))
-summary(lm(lai ~ log(chm_p90), data = df))
-summary(lm(lai ~ ndvi_trees, data = df))
-summary(lm(lai ~ ndvi_trees + chm_p90, data = df))
+summary(lm(licor_lai ~ hemisfer_lai, data = df))
+summary(lm(licor_lai ~ tree_cover_fraction, data = df))
+summary(lm(licor_lai ~ log(chm_p90), data = df))
+summary(lm(licor_lai ~ ndvi_trees, data = df))
+summary(lm(licor_lai ~ ndvi_trees + chm_p90, data = df))
+summary(lm(licor_lai ~ ndvi_cover, data = df))
 
 # Comparison plots
 biomes <- df_info %>%
@@ -79,7 +83,7 @@ biomes <- df_info %>%
     )
 
 gg_df <- df %>%
-  dplyr::select(c("plot_id", "lai", comparison$variable[1:4])) %>%
+  dplyr::select(c("plot_id", "lai", comparison$variable[1:6])) %>%
   tidyr::pivot_longer(
     cols = -c(plot_id, lai),
     names_to = "metric",
@@ -114,14 +118,19 @@ ggplot2::ggplot(data = gg_df, ggplot2::aes(x = value, y = lai)) +
     data = gg_df %>%
       dplyr::group_by(metric) %>%
       dplyr::summarise(
-        r2 = summary(lm(lai ~ value))$r.squared,
+        model = list(lm(lai ~ value)),
+        r2 = summary(model[[1]])$r.squared,
+        rmse = sqrt(mean(residuals(model[[1]])^2)),
         value = Inf,
         lai = -Inf,
         .groups = "drop"
       ),
     ggplot2::aes(
       x = value, y = lai,
-      label = paste0("R² = ", round(r2, 2))
+      label = paste0(
+        "R² = ", round(r2, 2),
+        "\nRMSE = ", round(rmse, 2)
+        )
     ),
     hjust = 1.1, vjust = -0.5,
     inherit.aes = FALSE
@@ -178,3 +187,25 @@ best_model <- stats::step(
 summary(best_model)
 formula(best_model)
 AIC(best_model)
+
+f_stillberg <- "D:/onedrive/OneDrive - Eidg. Forschungsanstalt WSL/shared/Stillberg/Summary_th1m.csv"
+df_2 <- read.csv(f_stillberg) %>%
+  dplyr::rename(
+    ndvi_trees = tree_ndvi_mean,
+    tree_cover_fraction = tree_cover,
+    lai = LAI
+  ) %>%
+  dplyr::mutate(dataset = "Stillberg") %>%
+  dplyr::select(
+    ndvi_trees, tree_cover_fraction, lai, dataset
+  ) %>%
+  rbind(dplyr::select(df %>% dplyr::mutate(dataset = "Global"), ndvi_trees, tree_cover_fraction, lai, dataset)
+  )
+
+ggplot2::ggplot(
+  data = df_2,
+  ggplot2::aes(x = ndvi_trees * tree_cover_fraction, y = lai)
+  ) +
+  ggplot2::geom_point(ggplot2::aes(colour = dataset)) +
+  ggplot2::geom_smooth(ggplot2::aes(colour = dataset), method = "lm") +
+  ggplot2::geom_smooth(method = "lm")
