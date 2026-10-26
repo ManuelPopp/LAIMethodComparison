@@ -323,6 +323,25 @@ lp2_median <- terra::global(lp2, fun = median, na.rm = TRUE)[1, 1]
 lp2_sd <- terra::global(lp2, fun = "sd", na.rm = TRUE)[1, 1]
 rm(lp2)
 
+# Compute the intensity ratio index (IRI)
+cat("\nComputing IRI...")
+dst_iri <- file.path(dir_rst, "iri", paste0(plot_id, "_iri.tif"))
+if (!file.exists(dst_iri) || recompute) {
+  dir.create(file.path(dir_rst, "iri"), recursive = TRUE, showWarnings = FALSE)
+  get_las()
+  lidR::grid_metrics(
+    las_normalised,
+    ~ mean(Intensity[Z >= th_z], na.rm = TRUE) /
+      mean(Intensity[Z < th_z], na.rm = TRUE),
+    res = 1
+  ) %>%
+  replace_nonfinite() %>%
+    terra::writeRaster(
+      filename = dst_iri,
+      overwrite = TRUE
+    )
+}
+
 # Compute hanopy height model
 cat("\nComputing CHM...")
 dst_chm <- file.path(dir_rst, "chm", paste0(plot_id, "_chm.tif"))
