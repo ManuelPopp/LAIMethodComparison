@@ -28,21 +28,50 @@ vars <- df %>%
   dplyr::select(where(is.numeric)) %>%
   dplyr::select(-licor_lai)
 
-results <- data.frame(
-  variable = names(vars),
-  correlation = sapply(vars, \(x) cor(x, df$licor_lai, use = "complete.obs"))
-) %>%
-  dplyr::mutate(explained_variance = correlation^2) %>%
-  dplyr::arrange(desc(explained_variance))
-
-log_results <- data.frame(
-  variable = names(vars),
-  correlation = sapply(vars, \(x) {
-    cor(log(x), df$licor_lai, use = "complete.obs")
+calc_lm_metrics <- function(x, y, log_transform = FALSE) {
+  x <- as.numeric(x)
+  y <- as.numeric(y)
+  valid <- is.finite(x) & is.finite(y)
+  
+  if (log_transform) {
+    valid <- valid & x > 0
+  }
+  
+  x <- x[valid]
+  y <- y[valid]
+  
+  if (length(x) < 3 || length(unique(x)) < 2 || length(unique(y)) < 2) {
+    return(c(R2adj = NA_real_, R2 = NA_real_))
+  }
+  
+  if (log_transform) {
+    x <- log(x)
+  }
+  
+  tryCatch({
+    model <- lm(y ~ x)
+    c(
+      R2adj = summary(model)$adj.r.squared,
+      R2 = summary(model)$r.squared
+    )
+  }, error = function(e) {
+    c(R2adj = NA_real_, R2 = NA_real_)
   })
-) %>%
-  dplyr::mutate(explained_variance = correlation^2) %>%
-  dplyr::arrange(desc(explained_variance))
+}
+
+results <- t(sapply(vars, \(x) {
+  calc_lm_metrics(x, df$licor_lai)
+})) |>
+  as.data.frame() |>
+  dplyr::mutate(variable = names(vars), .before = 1) |>
+  dplyr::arrange(dplyr::desc(R2adj))
+
+log_results <- t(sapply(vars, \(x) {
+  calc_lm_metrics(x, df$licor_lai, log_transform = TRUE)
+})) |>
+  as.data.frame() |>
+  dplyr::mutate(variable = names(vars), .before = 1) |>
+  dplyr::arrange(dplyr::desc(R2adj))
 
 comparison <- results %>%
   dplyr::mutate(relationship = "linear") %>%
@@ -50,7 +79,7 @@ comparison <- results %>%
     log_results %>%
       dplyr::mutate(relationship = "log-linear")
     ) %>%
-  dplyr::arrange(desc(explained_variance))
+  dplyr::arrange(desc(R2adj))
 rownames(comparison) <- NULL
 
 # Look at some correlations
@@ -60,6 +89,7 @@ plot(licor_lai ~ ndvi_trees, data = df)
 plot(licor_lai ~ log(lp1_median), data = df)
 plot(licor_lai ~ log(lp2_median), data = df)
 plot(licor_lai ~ log(abri_mean), data = df)
+plot(licor_lai ~ log(iri_mean), data = df)
 
 summary(lm(licor_lai ~ hemisfer_lai, data = df))
 summary(lm(licor_lai ~ tree_cover_fraction, data = df))
@@ -82,20 +112,25 @@ biomes <- df_info %>%
     .groups = "drop"
     )
 
+top_vars <- comparison %>%
+  dplyr::slice_head(n = 6) %>%
+  dplyr::select(variable, relationship, R2, R2adj)
+
+log_vars <- top_vars %>%
+  dplyr::filter(relationship == "log-linear") %>%
+  dplyr::pull(variable)
+
 gg_df <- df %>%
-  dplyr::select(c("plot_id", "lai", comparison$variable[1:6])) %>%
+  dplyr::select(c("plot_id", "licor_lai", top_vars$variable)) %>%
   tidyr::pivot_longer(
-    cols = -c(plot_id, lai),
+    cols = -c(plot_id, licor_lai),
     names_to = "metric",
     values_to = "value"
   ) %>%
   dplyr::mutate(
-    value = ifelse(
-      metric %in% comparison$variable[1:4][comparison$relationship == "log-linear"],
-      log(value), value
-      ),
+    value = ifelse(metric %in% log_vars, log(value), value),
     metric = ifelse(
-      metric %in% comparison$variable[1:4][comparison$relationship == "log-linear"],
+      metric %in% log_vars,
       paste0(metric, " (log-transformed)"),
       metric
     ),
@@ -105,32 +140,43 @@ gg_df <- df %>%
     metric = sub("_", " ", metric),
     plot = substr(plot_id, 1, 2)
   ) %>%
-  dplyr::left_join(
-    y = biomes,
-    by = "plot"
-  )
+  dplyr::left_join(y = biomes, by = "plot")
 
-ggplot2::ggplot(data = gg_df, ggplot2::aes(x = value, y = lai)) +
+gg_mods <- ggplot2::ggplot(data = gg_df, ggplot2::aes(x = value, y = licor_lai)) +
   ggplot2::geom_point(ggplot2::aes(colour = biome, shape = biome)) +
   ggplot2::geom_smooth(method = "lm") +
-  ggplot2::facet_wrap(. ~ metric, ncol = 2, scales = "free_x") +
+  ggplot2::facet_wrap(. ~ metric, ncol = 3, scales = "free_x") +
   ggplot2::geom_text(
     data = gg_df %>%
       dplyr::group_by(metric) %>%
-      dplyr::summarise(
-        model = list(lm(lai ~ value)),
-        r2 = summary(model[[1]])$r.squared,
-        rmse = sqrt(mean(residuals(model[[1]])^2)),
-        value = Inf,
-        lai = -Inf,
-        .groups = "drop"
-      ),
+      dplyr::group_modify(\(d, key) {
+        d <- d[is.finite(d$value) & is.finite(d$licor_lai), ]
+        
+        if (nrow(d) < 3 || dplyr::n_distinct(d$value) < 2) {
+          return(data.frame(
+            r2 = NA_real_,
+            rmse = NA_real_,
+            value = Inf,
+            licor_lai = -Inf
+          ))
+        }
+        
+        model <- lm(licor_lai ~ value, data = d)
+        
+        data.frame(
+          r2 = summary(model)$adj.r.squared,
+          rmse = sqrt(mean(residuals(model)^2)),
+          value = Inf,
+          licor_lai = -Inf
+        )
+      }) %>%
+      dplyr::ungroup(),
     ggplot2::aes(
-      x = value, y = lai,
+      x = value, y = licor_lai,
       label = paste0(
         "R² = ", round(r2, 2),
         "\nRMSE = ", round(rmse, 2)
-        )
+      )
     ),
     hjust = 1.1, vjust = -0.5,
     inherit.aes = FALSE
