@@ -93,3 +93,9 @@ write.csv(
   file.path(dir_main, "plotdata.csv"),
   row.names = FALSE
   )
+
+file.copy(
+  file.path(dir_main, "plotdata.csv"),
+  file.path("/lud11/poppman/tmp/lai/plotdata.csv"),
+  overwrite = TRUE
+  )

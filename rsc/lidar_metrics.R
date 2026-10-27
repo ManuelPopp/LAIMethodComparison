@@ -342,6 +342,14 @@ if (!file.exists(dst_iri) || recompute) {
     )
 }
 
+iri <- terra::rast(dst_iri) %>%
+  terra::crop(terra::project(terra::vect(boundary), .))
+
+iri_mean <- terra::global(iri, fun = "mean", na.rm = TRUE)[1, 1]
+iri_median <- terra::global(iri, fun = median, na.rm = TRUE)[1, 1]
+iri_sd <- terra::global(iri, fun = "sd", na.rm = TRUE)[1, 1]
+rm(iri)
+
 # Compute hanopy height model
 cat("\nComputing CHM...")
 dst_chm <- file.path(dir_rst, "chm", paste0(plot_id, "_chm.tif"))
@@ -403,6 +411,9 @@ df_metrics <- data.frame(
   lp2_mean = lp2_mean,
   lp2_median = lp2_median,
   lp2_sd = lp2_sd,
+  iri_mean = iri_mean,
+  iri_median = iri_median,
+  iri_sd = iri_sd,
   chm_mean = chm_mean,
   chm_median = chm_median,
   chm_sd = chm_sd,
