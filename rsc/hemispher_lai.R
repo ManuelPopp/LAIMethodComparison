@@ -7,6 +7,7 @@ library("dplyr")
 
 dir_raw <- "/dme/eunomia/plotdata/measurments/ground/visible_spectrum/hemispheric/rawdata"
 dir_selected <- "/dme/eunomia/plotdata/measurments/ground/visible_spectrum/hemispheric/hemisfer"
+dir_out <- "/lud11/poppman/tmp/lai"
 plot_folders <- list.dirs(dir_selected, recursive = FALSE, full.names = FALSE)
 
 for (plot_folder in plot_folders) {
@@ -32,11 +33,11 @@ for (plot_folder in plot_folders) {
 
   lais <- list()
   for (file in selected_files) {
-    f_image <- file.path(raw_files, plot_id, file)
+    f_image <- file.path(dir_raw, plot_id, file)
     img <- hemispheR::import_fisheye(
       f_image,
       channel = 3,
-      circ.mask = list(xc = 4752, yc = 2672, rc = 5450),
+      circ.mask = list(xc = 4752, yc = 2672, rc = 2672),
       circular = FALSE,
       gamma = 2.2,
       stretch = FALSE,
@@ -56,7 +57,7 @@ for (plot_folder in plot_folders) {
     gap.frac <- hemispheR::gapfrac_fisheye(
       img.bw,
       maxVZA = 90,
-      lens = "FC-E8",
+      lens = "equidistant",
       startVZA = 0,
       endVZA = 70,
       nrings = 7,
@@ -71,10 +72,13 @@ for (plot_folder in plot_folders) {
 
   lai <- do.call(rbind, lais) %>%
     dplyr::mutate(plot_id = plot_id)
+  dir.create(
+    file.path(dir_out, plot_id),
+    recursive = TRUE, showWarnings = FALSE
+    )
   write.csv(
     lai,
-    file.path("/lud11/poppman/tmp/lai", plot_id, paste0(plot_id, "_hemisfer_lai.csv")),
+    file.path(dir_out, plot_id, paste0(plot_id, "_hemispher_lai.csv")),
     row.names = FALSE
     )
-  )
 }
