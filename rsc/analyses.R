@@ -83,13 +83,18 @@ comparison <- results %>%
 rownames(comparison) <- NULL
 
 # Look at some correlations
-plot(licor_lai ~ hemisfer_lai, data = df)
-plot(licor_lai ~ log(chm_p90), data = df)
-plot(licor_lai ~ ndvi_trees, data = df)
-plot(licor_lai ~ log(lp1_median), data = df)
-plot(licor_lai ~ log(lp2_median), data = df)
-plot(licor_lai ~ log(abri_mean), data = df)
-plot(licor_lai ~ log(iri_mean), data = df)
+plot(licor_lai ~ hemisfer_lai, data = df, pch = 16, col = rgb(0, 102, 102, maxColorValue = 255))
+mod <- lm(licor_lai ~ hemisfer_lai, data = df)
+abline(a = coefficients(mod)[1], b = coefficients(mod)[2], col = "blue", lwd = 2)
+abline(a = 0, b = 1, lty = 2)
+text(x = 1, y = 7, expression("R"^2~"="~0.337))
+
+plot(licor_lai ~ log(chm_p90), data = df, pch = 16, col = rgb(0, 102, 102, maxColorValue = 255))
+plot(licor_lai ~ ndvi_trees, data = df, pch = 16, col = rgb(0, 102, 102, maxColorValue = 255))
+plot(licor_lai ~ log(lp1_median), data = df, pch = 16, col = rgb(0, 102, 102, maxColorValue = 255))
+plot(licor_lai ~ log(lp2_median), data = df, pch = 16, col = rgb(0, 102, 102, maxColorValue = 255))
+plot(licor_lai ~ log(abri_mean), data = df, pch = 16, col = rgb(0, 102, 102, maxColorValue = 255))
+plot(licor_lai ~ log(iri_mean), data = df, pch = 16, col = rgb(0, 102, 102, maxColorValue = 255))
 
 summary(lm(licor_lai ~ hemisfer_lai, data = df))
 summary(lm(licor_lai ~ tree_cover_fraction, data = df))
