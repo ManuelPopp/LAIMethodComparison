@@ -443,7 +443,7 @@ if (!file.exists(dst_lad) || recompute) {
   lidR::pixel_metrics(
     las_normalised,
     ~lad_metrics(Z, dz = 1, k = 0.5, z0 = th_z),
-    res = 20
+    res = 1
   ) %>%
     replace_nonfinite() %>%
     terra::writeRaster(
