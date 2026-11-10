@@ -468,7 +468,9 @@ rm(lad)
 
 
 # Rumple index (canopy surface roughness/complexity)
-rumple_index <- lidR::rumple_index(chm)
+target <- terra::rast(terra::ext(chm), resolution = 1, crs = terra::crs(chm))
+rumple_chm <- terra::resample(chm, target, method = "average")
+rumple_index <- lidR::rumple_index(rumple_chm)
 
 
 # Export data-----------------------------------------------------------
