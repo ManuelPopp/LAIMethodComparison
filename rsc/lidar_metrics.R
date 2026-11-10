@@ -399,6 +399,79 @@ tree_cover_fraction <- terra::global(
   )[1, 1]
 
 
+# Leaf area density profile (LAD)
+cat("\nComputing LAD...")
+
+dst_lad <- file.path(
+  dir_rst, "lad", paste0(plot_id, "_lad.tif")
+)
+
+if (!file.exists(dst_lad) || recompute) {
+  dir.create(
+    file.path(dir_rst, "lad"),
+    recursive = TRUE,
+    showWarnings = FALSE
+  )
+
+  # Calculate LAD profile and derived metrics
+  lad_metrics <- function(z, dz = 1, k = 0.5, z0 = th_z) {
+    profile <- lidR::LAD(
+      z,
+      dz = dz,
+      k = k,
+      z0 = z0
+    )
+
+    if (is.null(profile) || nrow(profile) == 0) {
+      return(
+        list(
+          integral = NA_real_, lad_mean = NA_real_, lad_median = NA_real_,
+          lad_sd = NA_real_
+          )
+      )
+    }
+
+    lad <- profile$lad
+    list(
+      integral = sum(lad * dz, na.rm = TRUE),
+      lad_mean = mean(lad, na.rm = TRUE),
+      lad_median = median(lad, na.rm = TRUE),
+      lad_sd = sd(lad, na.rm = TRUE)
+    )
+  }
+
+  lidR::pixel_metrics(
+    las_normalised,
+    ~lad_metrics(Z, dz = 1, k = 0.5, z0 = th_z),
+    res = 20
+  ) %>%
+    replace_nonfinite() %>%
+    terra::writeRaster(
+      filename = dst_lad,
+      overwrite = TRUE
+    )
+}
+
+lad <- terra::rast(dst_lad) %>%
+  terra::crop(
+    terra::project(terra::vect(boundary), .)
+  )
+
+lad_integral_mean <- terra::global(
+  lad[["integral"]], fun = "mean", na.rm = TRUE
+  )[1, 1]
+lad_mean <- terra::global(lad[["lad_mean"]], fun = "mean", na.rm = TRUE)[1, 1]
+lad_median <- terra::global(lad[["lad_median"]], fun = median, na.rm = TRUE)[1, 1]
+lad_sd <- terra::global(lad[["lad_sd"]], fun = "mean", na.rm = TRUE)[1, 1]
+
+rm(lad)
+
+
+# Rumple index (canopy surface roughness/complexity)
+rumple_index <- lidR::rumple_index(chm)
+
+
+# Export data-----------------------------------------------------------
 # Save metrics to CSV
 df_metrics <- data.frame(
   plot_id = plot_id,
@@ -419,6 +492,11 @@ df_metrics <- data.frame(
   chm_sd = chm_sd,
   chm_p90 = chm_p90,
   chm_iqr = chm_iqr,
+  lad_integral_mean = lad_integral_mean,
+  lad_mean = lad_mean,
+  lad_median = lad_median,
+  lad_sd = lad_sd,
+  rumple_index = rumple_index,
   tree_cover_fraction = tree_cover_fraction
 )
 
