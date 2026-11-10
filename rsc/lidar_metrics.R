@@ -439,7 +439,7 @@ if (!file.exists(dst_lad) || recompute) {
       lad_sd = sd(lad, na.rm = TRUE)
     )
   }
-
+  get_las()
   lidR::pixel_metrics(
     las_normalised,
     ~lad_metrics(Z, dz = 1, k = 0.5, z0 = th_z),
