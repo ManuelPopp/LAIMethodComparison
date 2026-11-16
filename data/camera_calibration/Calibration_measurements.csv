@@ -1,7 +1,21 @@
-﻿Degrees,Radians,Pixels,RelativePixels
-0,0,0,0
-15,0.261799388,860,0.182900893
-30,0.523598776,1743,0.370693322
-45,0.785398163,2660,0.565716716
-60,1.047197551,3635,0.773075287
-75,1.308996939,4702,1
+﻿# Calibration measurements derived from the calibration photos taken with various camera-lens-combinations.,,,,
+# Column descriptions:,,,,
+# - Degrees: Angular degrees (of the marker position relative to a vertical axis starting at the camera lens),,,,
+# - Radians: Degrees expressed as radians.,,,,
+# - Pixels: Distance of the respective marker position in the calibration photo from the centre marker in pixels,,,,
+# - Relative pixels: The distance to the centre point in pixels divided by that of the maximum distance to the centre,,,,
+# - Lens: Camera lens model,,,,
+Degrees,Radians,Pixels,RelativePixels,Lens
+0,0,0,0,Samyang 12 mm
+15,0.261799388,860,0.182900893,Samyang 12 mm
+30,0.523598776,1743,0.370693322,Samyang 12 mm
+45,0.785398163,2660,0.565716716,Samyang 12 mm
+60,1.047197551,3635,0.773075287,Samyang 12 mm
+75,1.308996939,4702,1,Samyang 12 mm
+0,0,0,0,7 Artisans
+15,0.261799388,494,0.161263996,7 Artisans
+30,0.523598776,992,0.323833774,7 Artisans
+45,0.785398163,1497,0.488688669,7 Artisans
+60,1.047197551,2006.05,0.654865668,7 Artisans
+75,1.308996939,2531.2,0.826298436,7 Artisans
+90,1.570796327,3063.3,1,7 Artisans
