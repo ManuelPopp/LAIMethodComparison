@@ -3,7 +3,7 @@ library("dplyr")
 f_src <- "Calibration_measurements.csv"
 f_dst <- "Calibration_coefficients.csv"
 
-df <- read.csv(f_src, skip = 7, header = TRUE)
+measurement_df <- read.csv(f_src, skip = 7, header = TRUE)
 
 get_coefficients <- function(df, lens_name, r2_min = 0.99998) {
   r2 <- 0
@@ -26,7 +26,7 @@ get_coefficients <- function(df, lens_name, r2_min = 0.99998) {
     data.frame(
       LensName = lens_name,
       Description = lens_name,
-      MaxAngle = max(df$Degrees),
+      MaxAngle = max(subset(df, Lens == lens_name)$Degrees),
       Coefficients = 0
       ),
     coefs
@@ -34,6 +34,10 @@ get_coefficients <- function(df, lens_name, r2_min = 0.99998) {
   return(out_df)
 }
 
-lapply(X = unique(df$Lens), FUN = get_coefficients, df = df) %>%
+lapply(
+  X = unique(measurement_df$Lens),
+  FUN = get_coefficients,
+  df = measurement_df
+  ) %>%
   dplyr::bind_rows() %>%
   write.csv(f_dst, row.names = FALSE)
