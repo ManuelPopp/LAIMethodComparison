@@ -10,6 +10,7 @@ where $\theta$ is the angle (in radians) between the camera's optical axis and a
 
 # References
 Schwalbe, E., 2005, February. Geometric modelling and calibration of fisheye lens camera systems. *Proc. 2nd Panoramic Photogrammetry Workshop, Int. Archives of Photogrammetry and Remote Sensing.* 36, 5. [url](https://www.isprs.org/proceedings/xxxvi/5-w8/Paper/PanoWS_Berlin2005_Schwalbe.pdf)
+
 Schleppi, P., Conedera, M., Sedivy, I., Thimonier, A., 2007. Correcting non-linearity and slope effects in the estimation of the leaf area index of forests from hemispherical photographs. *Agricultural and Forest Meteorology* 144, 236–242. doi: [10.1016/j.agrformet.2007.02.004](https://doi.org/10.1016/j.agrformet.2007.02.004)
 
 # Project internal usage notes
